@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Bottle Turbidity Visualizer</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+  <div class="app">
+    <div class="header">
+      <h1>Smart Bottle Turbidity Visualizer</h1>
+      <p>Upload a water sample image to measure turbidity (NTU)</p>
+    </div>
+
+    <div class="main-grid">
+
+      <!-- Left: Bottle Visual -->
+      <div class="bottle-panel">
+        <div class="bottle-wrap">
+          <div class="bottle-cap"></div>
+          <div class="bottle-body" id="bottleBody">
+            <div class="bottle-fill" id="bottleFill"></div>
+            <div class="bottle-shine"></div>
+          </div>
+        </div>
+        <div class="ntu-big" id="ntuBig">--</div>
+        <div class="ntu-label">NTU</div>
+        <div class="status-badge badge-default" id="statusBadge">Awaiting sample</div>
+
+        <!-- Gauge Bar -->
+        <div class="gauge-container">
+          <div class="gauge-scale">
+            <span>0</span><span>50</span><span>100</span>
+          </div>
+          <div class="gauge-bar">
+            <div class="gauge-marker" id="gaugeMarker" style="left: 0%"></div>
+          </div>
+          <div class="gauge-labels">
+            <span>Clean</span><span>Contaminated</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Controls + Data -->
+      <div class="right-panel">
+
+        <!-- Upload Card -->
+        <div class="card">
+          <div class="card-title">Upload water sample</div>
+          <div class="upload-row">
+            <input type="file" accept="image/*" id="imageUpload" />
+            <button class="btn btn-primary" onclick="document.getElementById('imageUpload').click()">Choose Image</button>
+            <button class="btn" onclick="exportCSV()">Export CSV</button>
+          </div>
+          <p class="hint">Tip: photograph water in a clear container against a white background for best accuracy.</p>
+        </div>
+
+        <!-- Metrics Card -->
+        <div class="card">
+          <div class="card-title">Session Summary</div>
+          <div class="metrics-row">
+            <div class="metric">
+              <div class="metric-val" id="mCount">0</div>
+              <div class="metric-lbl">Samples</div>
+            </div>
+            <div class="metric">
+              <div class="metric-val" id="mAvg">--</div>
+              <div class="metric-lbl">Avg NTU</div>
+            </div>
+            <div class="metric">
+              <div class="metric-val" id="mMax">--</div>
+              <div class="metric-lbl">Max NTU</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chart Card -->
+        <div class="card">
+          <div class="card-title">NTU Trend</div>
+          <div class="chart-wrap">
+            <canvas id="ntuChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Log Card -->
+        <div class="card">
+          <div class="card-title">Reading Log</div>
+          <div class="log-wrap">
+            <table class="log-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Time</th>
+                  <th>NTU</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="logBody">
+                <tr>
+                  <td colspan="4" class="log-empty">No readings yet</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Reference Card -->
+        <div class="card">
+          <div class="card-title">WHO Turbidity Reference</div>
+          <div class="thresholds">
+            <div class="thr thr-excellent">
+              <div class="thr-name">Excellent</div>
+              <div class="thr-range">0–5 NTU</div>
+            </div>
+            <div class="thr thr-safe">
+              <div class="thr-name">Safe</div>
+              <div class="thr-range">6–25 NTU</div>
+            </div>
+            <div class="thr thr-cloudy">
+              <div class="thr-name">Cloudy</div>
+              <div class="thr-range">26–50 NTU</div>
+            </div>
+            <div class="thr thr-notrec">
+              <div class="thr-name">Not Rec.</div>
+              <div class="thr-range">51–75 NTU</div>
+            </div>
+            <div class="thr thr-contaminated">
+              <div class="thr-name">Contaminated</div>
+              <div class="thr-range">76–100 NTU</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+
+</body>
+</html>
